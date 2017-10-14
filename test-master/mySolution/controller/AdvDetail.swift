@@ -160,7 +160,7 @@ class AdvDetail: UIViewController{
         let adverid = m_objData.m_strAdverId
         let adid = m_objData.m_strAdId
         let ip = CommonFunc.getPubIp();
-        let url = Constants.m_baseUrl + "app/duijie/queryOneMission?adid=" + adid + "&idfa=" + idfa + "&ip=" + ip + "&adverId=" + adverid;
+        let url = Constants.m_baseUrl + "app/duijie/queryOneMission?adid=" + adid + "&idfa=" + idfa + "&ip=" + ip + "&adverId=" + adverid + "&userNum=" + UserInfo.shared.m_strUserNum;
         
         Alamofire.request(url).responseJSON {response in
             

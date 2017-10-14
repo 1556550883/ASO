@@ -74,7 +74,7 @@ class AdvView: UITableViewController {
         let adverid = data.m_strAdverId
         let userappid = UserInfo.shared.m_strUserAppId
         
-        let url = Constants.m_baseUrl + "app/duijie/lingQuRenWu?adid=" + adid + "&idfa=" + idfa + "&ip=" + ip + "&userAppId=" + userappid + "&adverId=" + adverid + "&appleId=" + UserInfo.shared.m_strAppId;
+        let url = Constants.m_baseUrl + "app/duijie/lingQuRenWu?adid=" + adid + "&idfa=" + idfa + "&ip=" + ip + "&userAppId=" + userappid + "&adverId=" + adverid + "&appleId=" + UserInfo.shared.m_strAppId + "&userNum" + UserInfo.shared.m_strUserNum;
         
         Alamofire.request(url).responseJSON {response in
             NetCtr.parseResponse(view: self, response: response, successHandler:{
