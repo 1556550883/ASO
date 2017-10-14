@@ -154,9 +154,8 @@ class AdvDetail: UIViewController{
         self.present(alertController, animated: true, completion: nil)
     }
     
-    
-    @IBAction func onChaxuClick(_ sender: Any) {
-        
+    @IBAction func onChaxuClick(_ sender: Any)
+    {
         let idfa = CommonFunc.getIDFA();
         let adverid = m_objData.m_strAdverId
         let adid = m_objData.m_strAdId

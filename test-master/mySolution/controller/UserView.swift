@@ -15,8 +15,9 @@ class UserView: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     @IBOutlet weak var scr_detail: UITableView!
     
-    @IBOutlet weak var tf_userid: UILabel!
+    @IBOutlet var tf_money_sum: UILabel!
     
+    @IBOutlet weak var tf_userid: UILabel!
     
     @IBOutlet weak var m_tableview: UITableView!
     
@@ -44,12 +45,14 @@ class UserView: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     func refreshView()
     {
-        tf_money.text = String(format: "%.1f", UserInfo.shared.m_strScore) ;
+        tf_money.text = String(format: "%.1f", UserInfo.shared.m_strScore);
+        tf_money_sum.text = String(format: "%.1f", UserInfo.shared.m_strScoreSum) ;
     }
     
     func requestInfo()
     {
         self.tf_money.text = "???"
+        self.tf_money_sum.text = "???"
         let userNum = UserInfo.shared.m_strUserNum
         let url = Constants.m_baseUrl + "app/userScore/getScore?userNum=" + userNum;
         Alamofire.request(url).responseJSON
@@ -58,38 +61,15 @@ class UserView: UIViewController,UITableViewDataSource,UITableViewDelegate
                 NetCtr.parseResponse(view: self, response: response, successHandler:
                     {
                         obj,msg in
-                        let score = obj["score"]!
-                       
-                        UserInfo.shared.setScore(score: score);
+                        let score = obj["score"]?.floatValue
+                        let scoreSum = obj["scoreSum"]?.floatValue
+                        UserInfo.shared.setScore(score: score!);
+                        UserInfo.shared.setScoreSum(scoreSum: scoreSum!);
                         
                         self.refreshView()
                 })
         }
     }
-    
-//    func requestInfo()
-//    {
-//        self.tf_money.text = "???"
-//        let userNum = UserInfo.shared.m_strUserNum
-//        let url = Constants.m_baseUrl + "app/userScore/getScore?userNum=" + userappid;
-//        Alamofire.request(url).responseJSON
-//        {
-//            response in
-//            NetCtr.parseResponse(view: self, response: response, successHandler:
-//            {
-//                obj,msg in
-//                let userInfo = obj["userInfo"]!
-//                let userScore = userInfo["userScore"] as! [String:AnyObject]
-//
-//                let adverInfo = obj["adverInfo"] as! [AnyObject]
-//                UserInfo.shared.setAdverInfo(vAdverInfo: adverInfo)
-//
-//                UserInfo.shared.setScore(score: (userScore["score"]?.floatValue)!);
-//
-//                self.refreshView()
-//            })
-//        }
-//    }
     
     override func didReceiveMemoryWarning()
     {
@@ -152,7 +132,8 @@ class UserView: UIViewController,UITableViewDataSource,UITableViewDelegate
         let target = data?.strTargetName;
         if (target != "null" )
         {
-            self.performSegue(withIdentifier: target!, sender: self)
+            //self.performSegue(withIdentifier: target!, sender: self)
+            CommonFunc.alert(view: self, title: "提示", content: "该功能暂未开放，敬请期待！", okString: "知道了")
         }
         else
         {

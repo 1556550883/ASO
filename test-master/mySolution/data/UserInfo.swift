@@ -18,6 +18,7 @@ class UserInfo {
     var m_strPassWord:String = "";
     var m_strUserNum:String = "";
     var m_strScore:Float = 0.0;
+    var m_strScoreSum:Float = 0.0;
     var m_vAdverInfo:[AnyObject]!;
     //user apple id
     var m_strAppId:String = "";
@@ -40,6 +41,10 @@ class UserInfo {
     
     func setScore(score:Float) {
         m_strScore = score;
+    }
+    
+    func setScoreSum(scoreSum:Float) {
+        m_strScoreSum = scoreSum;
     }
     
     func setUserAppId(id:String) {

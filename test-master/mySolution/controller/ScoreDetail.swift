@@ -10,11 +10,8 @@ import UIKit
 
 class ScoreDetail: UITableViewController {
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,8 +34,6 @@ class ScoreDetail: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-        
         //1创建cell
         let identifier : String = "scoredetailcell"
         var cell:ScoreCell = tableView.dequeueReusableCell(withIdentifier: identifier) as! ScoreCell

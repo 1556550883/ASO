@@ -17,17 +17,26 @@ class SelectLoginTypeView: UIViewController {
         CommonFunc.goto(from: self, target: "login_with_pwd");
     }
     
-    
-    @IBAction func onGuestClick(_ sender: Any) {
+    @IBAction func onGuestClick(_ sender: Any)
+    {
         play()
         let idfa = CommonFunc.getIDFA();
         let url = Constants.m_baseUrl + "app/user/visitorLogin?idfa=" + idfa;
-        Alamofire.request(url).responseJSON {response in
-            
-            NetCtr.parseResponse(view: self, response: response, successHandler:{
+        Alamofire.request(url).responseJSON
+        {
+            response in
+            NetCtr.parseResponse(view: self, response: response, successHandler:
+            {
                 obj,msg in
                 let userAppId = obj["userAppId"]?.stringValue;
+                let loginName = obj["loginName"] as! String;
+                let userNum = obj["userNum"] as! String;
+                let score = obj["score"]?.floatValue;
                 UserInfo.shared.setUserAppId(id:userAppId! )
+                UserInfo.shared.setLoginName(name:loginName)
+                UserInfo.shared.setUserNum(userNum: userNum)
+                UserInfo.shared.setScore(score: score!)
+                
                 CommonFunc.goto(from: self, target: "login_with_guest");
             })
         
