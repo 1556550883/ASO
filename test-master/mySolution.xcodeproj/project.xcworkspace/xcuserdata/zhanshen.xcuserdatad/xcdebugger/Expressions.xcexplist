@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "LoginView.(login(Any) -&gt; ()).(closure #1):LoginView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "response.result">
+            </PersistentString>
+            <PersistentString
+               value = "json1">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AdvView.(getAdvList() -&gt; ()).(closure #1):AdvView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "item[&quot;adid&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AdvView.tableView(UITableView, didSelectRowAt : IndexPath) -&gt; ():AdvView.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AdvDetail.viewDidLoad() -&gt; ():AdvDetail.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.data">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AdvData.setName(name : String) -&gt; ():AdvData.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.m_strId">
+            </PersistentString>
+            <PersistentString
+               value = "self.m_strUrl">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

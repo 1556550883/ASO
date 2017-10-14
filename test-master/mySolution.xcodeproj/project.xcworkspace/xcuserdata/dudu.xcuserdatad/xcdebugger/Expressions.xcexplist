@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "ScoreDetail.tableView(UITableView, numberOfRowsInSection : Int) -&gt; Int:ScoreDetail.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "UserInfo.shared.m_vAdverInfo">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "UserView.refreshView() -&gt; ():UserView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "UserInfo.shared.m_strScore">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "CellView.viewDidLoad() -&gt; ():CellView.swift">
+      </ContextState>
+      <ContextState
+         contextName = "AdvData.setDayEnd(str : String) -&gt; ():AdvData.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "m_strAdverDayEnd">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.loadView() -&gt; ():ViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.adsList">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AdvDetail.gotoAppStore() -&gt; ():AdvDetail.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "m_objData.m_strUrl">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "MyTableBarController.viewDidLoad() -&gt; ():MyTableBarController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "CellView.viewDidAppear(Bool) -&gt; ():CellView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.viewControllers">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AdvView.tableView(UITableView, numberOfRowsInSection : Int) -&gt; Int:AdvView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.m_vAdvList">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AdvView.(getAdvList() -&gt; ()).(closure #1):AdvView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.adsList">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ScoreDetail.tableView(UITableView, cellForRowAt : IndexPath) -&gt; UITableViewCell:ScoreDetail.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "adverinfo[&quot;completeCount&quot;]">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "MyTableViewController.viewDidLoad() -&gt; ():MyTableViewController.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "parent">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "static CommonFunc.download(url : String, save : String, callBack : (String) -&gt; ()) -&gt; ():Common.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "vecImgCache">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AdvView.tableView(UITableView, cellForRowAt : IndexPath) -&gt; UITableViewCell:AdvView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "indexPath.row">
+            </PersistentString>
+            <PersistentString
+               value = "self.m_vAdvList">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "LoginViewController.(login(Any) -&gt; ()).(closure #1):LoginViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "LoginView.onAppIdClick(Any) -&gt; ():LoginView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "self.appid.titleLabel?.text">
+            </PersistentString>
+            <PersistentString
+               value = "UIPasteboard.general.string">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "ViewController.tableView(UITableView, numberOfRowsInSection : Int) -&gt; Int:ViewController.swift">
+      </ContextState>
+      <ContextState
+         contextName = "LoginView.checkAppIdToggle() -&gt; ():LoginView.swift">
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>

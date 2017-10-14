@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VariablesViewState
+   version = "1.0">
+   <ContextStates>
+      <ContextState
+         contextName = "LoginView.(checkAppIdToggle() -&gt; ()).(closure #1).(closure #1):LoginView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "userInfos.count">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AdvView.(lingqurenwu(data : AdvData, callBack : () -&gt; ()) -&gt; ()).(closure #1).(closure #1):AdvView.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "if(msg == &quot;&#x4f60;&#x5df2;&#x6210;&#x529f;&#x9886;&#x53d6;&#x4efb;&#x52a1;&#xff0c;&#x4e0d;&#x9700;&#x91cd;&#x590d;&#x9886;&#x53d6;&#xff01;&quot;)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "AdvDetail.caculateTime() -&gt; ():AdvDetail.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "m_objData.m_timeLimit">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+      <ContextState
+         contextName = "static UserInfo.allUserFromDB() -&gt; [UserInfo]?:UserInfo.swift">
+         <PersistentStrings>
+            <PersistentString
+               value = "tempUserDictM[0].index(forKey: &quot;password&quot;)">
+            </PersistentString>
+         </PersistentStrings>
+      </ContextState>
+   </ContextStates>
+</VariablesViewState>
