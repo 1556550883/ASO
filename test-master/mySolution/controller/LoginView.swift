@@ -24,7 +24,7 @@ class LoginView: UIViewController {
         Alamofire.request(url).responseJSON {response in
             
             NetCtr.parseResponse(view: self, response: response, successHandler:{
-                obj,msg in
+                result,obj,msg in
                 let appleIdCheck = obj["appleIdCheck"]?.int32Value;
                 let leastTaskTime:UInt = obj["leastTaskTime"]!.uintValue;
                 
@@ -119,7 +119,7 @@ class LoginView: UIViewController {
         Alamofire.request(url).responseJSON {response in
             
             NetCtr.parseResponse(view: self, response: response, successHandler:{
-                obj,msg in
+                result,obj,msg in
                 let userAppId = obj["userAppId"]?.stringValue;
                 let loginName = obj["loginName"] as! String;
                 let userNum = obj["userNum"] as! String;

@@ -174,9 +174,9 @@ class CommonFunc {
         let timeNumber = Int(end_time.timeIntervalSince1970 - create_time.timeIntervalSince1970)
         let interval = limitTime * 60 - timeNumber;
         
-        if(interval < 0)
+        if(interval <= 0)
         {
-            return "-1";
+            return "0";
         }
         
         return self.getHHMMSSFormSS(seconds: interval)

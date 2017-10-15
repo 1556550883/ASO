@@ -12,6 +12,6 @@ class Constants
 {
     
     private init(){}
-    static var m_baseUrl = "http://192.168.3.104:8080/sjjz/"
-    //static var m_baseUrl = "http://116.62.103.139:8080/sjjz/"
+    //static var m_baseUrl = "http://192.168.3.104:8080/sjjz/"
+    static var m_baseUrl = "http://116.62.103.139:8080/sjjz/"
 }

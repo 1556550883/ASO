@@ -29,9 +29,8 @@ class AdvView: UITableViewController {
         
         self.play();
         Alamofire.request(url).responseJSON {response in
-            
             NetCtr.parseResponse(view: self, response: response, successHandler:{
-                obj,msg in
+                result,obj,msg in
                 let array = obj["result"] as! Array<AnyObject>
                 
                 self.m_vAdvList = [];
@@ -78,7 +77,7 @@ class AdvView: UITableViewController {
         
         Alamofire.request(url).responseJSON {response in
             NetCtr.parseResponse(view: self, response: response, successHandler:{
-                obj,msg in
+                result,obj,msg in
                 callBack();
         
                 if let json = response.result.value

@@ -366,9 +366,9 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d33-hU-I3f">
                                 <rect key="frame" x="224" y="280" width="87" height="19"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.58594081170614398" green="1" blue="0.37412013422021884" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.03920000383518104" green="0.54216862956793266" blue="0.56802542098445596" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <state key="normal" title="放弃任务">
-                                    <color key="titleColor" red="1" green="0.26820756168062609" blue="0.3619374772545354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleColor" red="0.98657336450445487" green="1" blue="0.91140310289701354" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <color key="titleShadowColor" red="0.088532349426951776" green="0.025386350797376379" blue="0.14449077072538863" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
@@ -636,7 +636,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="KdQ-tS-hjY"/>
-        <segue reference="1yF-jA-CX9"/>
+        <segue reference="xyH-FU-6uG"/>
         <segue reference="GlE-XT-KpM"/>
     </inferredMetricsTieBreakers>
 </document>

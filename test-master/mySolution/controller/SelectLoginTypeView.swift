@@ -27,7 +27,7 @@ class SelectLoginTypeView: UIViewController {
             response in
             NetCtr.parseResponse(view: self, response: response, successHandler:
             {
-                obj,msg in
+                result,obj,msg in
                 let userAppId = obj["userAppId"]?.stringValue;
                 let loginName = obj["loginName"] as! String;
                 let userNum = obj["userNum"] as! String;

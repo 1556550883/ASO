@@ -18,8 +18,8 @@ class AdvDetail: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         //禁用会退键
-        //self.navigationItem.hidesBackButton = true;
-        //self.navigationItem.setHidesBackButton(true, animated: false)
+        self.navigationItem.hidesBackButton = true;
+        self.navigationItem.setHidesBackButton(true, animated: false)
         btn_url.setTitle("关键字：" + m_objData.m_strName, for: .normal);
         btn_chaxun.setTitle("查询任务", for: .normal);
         btn_open.setTitle("打开软件", for: .normal);
@@ -42,7 +42,7 @@ class AdvDetail: UIViewController{
     func caculateTime() {
         let endTime = CommonFunc.getNowTime();
         let interval = CommonFunc.getTimeInterval(create_time: m_objData.m_dateAdverDayStart!, end_time: endTime, limitTime: m_objData.m_timeLimit);
-        if(interval == "-1")
+        if(interval == "0")
         {
             m_schEntry?.invalidate()
             let idfa = CommonFunc.getIDFA();
@@ -51,8 +51,7 @@ class AdvDetail: UIViewController{
             
             Alamofire.request(url).responseJSON {response in
                 NetCtr.parseResponse(view: self, response: response, successHandler: {
-                    obj,msg in
-
+                   result,obj,msg in
                     CommonFunc.alert(view: self, title: "任务超时", content: "任务已自动被放弃！", okString: "好的", okHandler:{
                          action in
                          CommonFunc.goto(from: self, target: "give_up_task");
@@ -101,7 +100,7 @@ class AdvDetail: UIViewController{
             
             Alamofire.request(url).responseJSON {response in
                 NetCtr.parseResponse(view: self, response: response, successHandler: {
-                    obj,msg in
+                    result,obj,msg in
                     BackGroundTimer.shared.startBackTick(sec: self.m_objData.m_iTimeRelease, bundleid:self.m_objData.m_strBundleId);
                 })
             }
@@ -131,7 +130,6 @@ class AdvDetail: UIViewController{
         self.gotoAppStore();
     }
     
-    
     @IBAction func onGiveUpTaskClick(_ sender: Any) {
         let alertController = UIAlertController(title: "放弃任务", message: "您确定要放弃任务吗？", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
@@ -144,7 +142,7 @@ class AdvDetail: UIViewController{
 
             Alamofire.request(url).responseJSON {response in
                  NetCtr.parseResponse(view: self, response: response, successHandler: {
-                    obj,msg in
+                    result,obj,msg in
                     CommonFunc.goto(from: self, target: "give_up_task");                 })
             }
         })
@@ -165,8 +163,12 @@ class AdvDetail: UIViewController{
         Alamofire.request(url).responseJSON {response in
             
             NetCtr.parseResponse(view: self, response: response, successHandler:{
-                obj,msg in
-                CommonFunc.alert(view: self, title: "任务进度", content: msg, okString: "知道了")
+                result, obj, msg in
+                CommonFunc.alert(view: self, title: "任务进度", content: msg, okString: "继续做任务", okHandler: {
+                    (UIAlertAction) in
+                    
+                    CommonFunc.goto(from: self, target: "give_up_task");
+                }, exitString:"取消")
             })
         }
     }

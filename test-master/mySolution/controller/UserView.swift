@@ -60,7 +60,7 @@ class UserView: UIViewController,UITableViewDataSource,UITableViewDelegate
                 response in
                 NetCtr.parseResponse(view: self, response: response, successHandler:
                     {
-                        obj,msg in
+                        result,obj,msg in
                         let score = obj["score"]?.floatValue
                         let scoreSum = obj["scoreSum"]?.floatValue
                         UserInfo.shared.setScore(score: score!);
