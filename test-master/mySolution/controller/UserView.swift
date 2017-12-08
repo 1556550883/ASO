@@ -132,8 +132,8 @@ class UserView: UIViewController,UITableViewDataSource,UITableViewDelegate
         let target = data?.strTargetName;
         if (target != "null" )
         {
-            //self.performSegue(withIdentifier: target!, sender: self)
-            CommonFunc.alert(view: self, title: "提示", content: "该功能暂未开放，敬请期待！", okString: "知道了")
+            self.performSegue(withIdentifier: target!, sender: self)
+            //CommonFunc.alert(view: self, title: "提示", content: "该功能暂未开放，敬请期待！", okString: "知道了")
         }
         else
         {
