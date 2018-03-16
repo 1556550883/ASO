@@ -10,7 +10,9 @@ import UIKit
 
 class ScoreCell: UITableViewCell {
     @IBOutlet weak var tf_title: UILabel!
-    @IBOutlet weak var tf_num: UILabel!
+    @IBOutlet var tf_status: UILabel!
+    @IBOutlet var tf_price: UILabel!
+    @IBOutlet var tf_completeTime: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

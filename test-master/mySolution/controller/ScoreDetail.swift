@@ -7,13 +7,33 @@
 //
 
 import UIKit
+import Alamofire
 
 class ScoreDetail: UITableViewController {
-
+    //菊花
+    let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.setHidesBackButton(false, animated:false)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        queryTaskSum()
     }
-
+    
+    func queryTaskSum(){
+        self.play()
+        let url = Constants.m_baseUrl + "app/duijie/queryTaskSum?idfa=" + CommonFunc.getIDFA();
+        Alamofire.request(url).responseJSON {response in
+            NetCtr.parseResponse(view: self, response: response, successHandler:{
+                result, obj, msg in
+                let array = obj["result"] as! Array<AnyObject>
+                UserInfo.shared.setAdverInfo(vAdverInfo: array)
+                self.tableView.reloadData();
+                self.stop()
+            })
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -36,22 +56,52 @@ class ScoreDetail: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //1创建cell
         let identifier : String = "scoredetailcell"
-        var cell:ScoreCell = tableView.dequeueReusableCell(withIdentifier: identifier) as! ScoreCell
-        if cell == nil {
-            //在swift中使用枚举类型方式 1>枚举类型.具体类型  2> .具体类型
-            cell = ScoreCell(style: UITableViewCellStyle.value1, reuseIdentifier: identifier)
-        }
+        let cell:ScoreCell = tableView.dequeueReusableCell(withIdentifier: identifier) as! ScoreCell
         
         // Configure the cell...
         let adverinfo = UserInfo.shared.m_vAdverInfo[indexPath.row];
         
         cell.tf_title.text = adverinfo["adverName"] as! String
-        cell.tf_num.text = "已完成:" + (adverinfo["completeCount"] as AnyObject).stringValue
+        let price = adverinfo["adverPrice"] as? NSNumber
+        cell.tf_price.text = price?.stringValue
+        let status = adverinfo["status"] as! String
+        var statusText = "none"
+        if(status == "1")
+        {
+            statusText = "进行中..."
+        }else if (status == "1.5")
+        {
+            statusText = "任务打开"
+        }else if (status == "1.6")
+        {
+            statusText = "超时"
+        }else if(status == "2")
+        {
+            statusText = "完成"
+        }
+        cell.tf_status.text = statusText
+        if(status == "2")
+        {
+             cell.tf_completeTime.text = adverinfo["completeTime"] as! String
+        }
         
         return cell
     }
  
-
+    //菊花转动开始
+    func play()
+    {
+        activityIndicator.startAnimating()
+        self.view.isUserInteractionEnabled = false;
+    }
+    
+    //菊花转动结束
+    func stop()
+    {
+        activityIndicator.stopAnimating()
+        self.view.isUserInteractionEnabled = true;
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

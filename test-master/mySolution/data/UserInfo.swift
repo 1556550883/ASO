@@ -18,11 +18,14 @@ class UserInfo {
     var m_strPassWord:String = "";
     var m_strUserNum:String = "";
     var m_strScore:Float = 0.0;
+    var m_strScoreDay:Float = 0.0;
     var m_strScoreSum:Float = 0.0;
-    var m_vAdverInfo:[AnyObject]!;
+    var m_vAdverInfo:[AnyObject]! = [];
     //user apple id
     var m_strAppId:String = "";
     var m_bCheckAppId:Bool = false;
+    var m_idfa:String = "";
+    var m_sys_version = "";
     
     func setCheckAppId(b:Bool) -> Void {
         m_bCheckAppId = b;
@@ -43,6 +46,10 @@ class UserInfo {
         m_strScore = score;
     }
     
+    func setScoreDay(scoreDay:Float) {
+        m_strScoreDay = scoreDay;
+    }
+    
     func setScoreSum(scoreSum:Float) {
         m_strScoreSum = scoreSum;
     }
@@ -61,6 +68,14 @@ class UserInfo {
     
     func setUserNum(userNum:String){
         m_strUserNum = userNum
+    }
+    
+    func setMidfa(idfa:String) {
+        m_idfa = idfa;
+    }
+    
+    func setSysVersion(version:String) {
+        m_sys_version = version;
     }
     
     //将自身插入数据库接口

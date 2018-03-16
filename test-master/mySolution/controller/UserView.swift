@@ -9,50 +9,62 @@
 import UIKit
 import Alamofire
 
-class UserView: UIViewController,UITableViewDataSource,UITableViewDelegate
+class UserView: UIViewController,UITableViewDelegate
 {
-    @IBOutlet weak var tf_money: UILabel!
+    @IBOutlet var user_view: UIView!
+    @IBOutlet var user_task: UIButton!
+    @IBOutlet var tf_userid: UITextField!
+    @IBOutlet var scoreDay: UITextField!
+    @IBOutlet var score: UITextField!
+    @IBOutlet var scoreSum: UITextField!
+        @IBOutlet weak var inviteClick: UIButton!
     
-    @IBOutlet weak var scr_detail: UITableView!
-    
-    @IBOutlet var tf_money_sum: UILabel!
-    
-    @IBOutlet weak var tf_userid: UILabel!
-    
-    @IBOutlet weak var m_tableview: UITableView!
-    
-    var m_vBtns:[UserBtnData] = [
-        UserBtnData(icon:"man", name:"个人信息", target:"null"),
-        UserBtnData(icon:"drink-toast", name:"邀请好友", target:"null"),
-        UserBtnData(icon:"gift", name:"收入明细", target:"scoredetail"),
-        UserBtnData(icon:"search", name:"提现记录", target:"null")];
-    
+    //菊花
+    let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
     
     override func viewDidLoad()
     {
         super.viewDidLoad()
 
-        m_tableview.dataSource = self;
-        m_tableview.delegate = self;
+        user_view.clipsToBounds = false
+        user_view.layer.cornerRadius = 10.0
+        user_view.layer.rasterizationScale = UIScreen.main.scale
+        user_view.layer.contentsScale =  UIScreen.main.scale
+        user_view.layer.shadowColor = UIColor.gray.cgColor
+        user_view.layer.shadowOffset = CGSize.zero
+        user_view.layer.shadowRadius = 10.0
+        user_view.layer.shadowOpacity = 0.5
     }
 
     override func viewDidAppear(_ animated: Bool)
     {
-        self.tf_userid.text = UserInfo.shared.m_strUserAppId;
+        self.navigationItem.setHidesBackButton(true, animated:false)
+        self.navigationController?.setNavigationBarHidden(true, animated: false)
         
+        self.tf_userid.text = UserInfo.shared.m_strLoginName
+        self.tf_userid.isUserInteractionEnabled = false
         self.requestInfo();
+    }
+    
+    @IBAction func inviteClick(_ sender: Any) {
+     self.performSegue(withIdentifier: "ToInvite", sender: self)
+    }
+    @IBAction func playTaskClick(_ sender: Any){
+        self.performSegue(withIdentifier: "task", sender: self)
     }
     
     func refreshView()
     {
-        tf_money.text = String(format: "%.1f", UserInfo.shared.m_strScore);
-        tf_money_sum.text = String(format: "%.1f", UserInfo.shared.m_strScoreSum) ;
+        scoreDay.text = String(format: "%.1f", UserInfo.shared.m_strScoreDay);
+        score.text = String(format: "%.1f", UserInfo.shared.m_strScore) ;
+        scoreSum.text = String(format: "%.1f", UserInfo.shared.m_strScoreSum);
+        self.scoreDay.isUserInteractionEnabled = false
+        self.score.isUserInteractionEnabled = false
+        self.scoreSum.isUserInteractionEnabled = false
     }
     
     func requestInfo()
     {
-        self.tf_money.text = "???"
-        self.tf_money_sum.text = "???"
         let userNum = UserInfo.shared.m_strUserNum
         let url = Constants.m_baseUrl + "app/userScore/getScore?userNum=" + userNum;
         Alamofire.request(url).responseJSON
@@ -63,8 +75,10 @@ class UserView: UIViewController,UITableViewDataSource,UITableViewDelegate
                         result,obj,msg in
                         let score = obj["score"]?.floatValue
                         let scoreSum = obj["scoreSum"]?.floatValue
+                        let scoreDay = obj["scoreDay"]?.floatValue
                         UserInfo.shared.setScore(score: score!);
                         UserInfo.shared.setScoreSum(scoreSum: scoreSum!);
+                        UserInfo.shared.setScoreDay(scoreDay: scoreDay!)
                         
                         self.refreshView()
                 })
@@ -79,67 +93,17 @@ class UserView: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     @IBAction func onDetailClick(_ sender: Any)
     {
-        self.performSegue(withIdentifier: "scoredetail", sender: self)
+        self.performSegue(withIdentifier: "detail", sender: self)
+    }
+    
+    @IBAction func onUserDetailClick(_ sender: Any) {
+        self.performSegue(withIdentifier: "userDetail", sender: self)
     }
     
     // MARK: - Table view data source
     func numberOfSections(in tableView: UITableView) -> Int
     {
         return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
-    {
-        return m_vBtns.count;
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
-    {
-        
-        //1创建cell
-        let identifier : String = "userinforcell"
-        var cell:UserInfoCell = tableView.dequeueReusableCell(withIdentifier: identifier) as! UserInfoCell
-        if cell == nil
-        {
-            //在swift中使用枚举类型方式 1>枚举类型.具体类型  2> .具体类型
-            cell = UserInfoCell(style: UITableViewCellStyle.value1, reuseIdentifier: identifier)
-        }
-        
-        if (indexPath.row < m_vBtns.count)
-        {
-            let data = m_vBtns[indexPath.row];
-            let icon = data.strIconName;
-            let name = data.strName;
-            
-            cell.m_data = data;
-            
-            let path = Bundle.main.path(forResource: icon, ofType: "png")
-            let newImage = UIImage(contentsOfFile: path!)
-            cell.m_img.image = newImage;
-            cell.m_label?.text = name;
-        }
-        
-        cell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator//添加箭头
-        
-//        cell.selectionStyle = UITableViewCellSelectionStyle.none
-        return cell
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
-    {
-        let cell = tableView.cellForRow(at: indexPath) as! UserInfoCell;
-        let data = cell.m_data;
-        let target = data?.strTargetName;
-        if (target != "null" )
-        {
-            self.performSegue(withIdentifier: target!, sender: self)
-            //CommonFunc.alert(view: self, title: "提示", content: "该功能暂未开放，敬请期待！", okString: "知道了")
-        }
-        else
-        {
-            CommonFunc.alert(view: self, title: "提示", content: "该功能暂未开放，敬请期待！", okString: "知道了")
-        }
-        m_tableview.deselectRow(at: indexPath, animated: true)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
@@ -153,6 +117,22 @@ class UserView: UIViewController,UITableViewDataSource,UITableViewDelegate
     
     @IBAction func onTiXianClick(_ sender: Any)
     {
-        CommonFunc.alert(view: self, title: "提示", content: "该功能暂未开放，敬请期待！", okString: "知道了")
+        CommonFunc.alert(view: self, title: "提示", content: "请先绑定您的微信！", okString: "知道了")
     }
+    
+    
+    //菊花转动开始
+    func play()
+    {
+        activityIndicator.startAnimating()
+        self.view.isUserInteractionEnabled = false;
+    }
+    
+    //菊花转动结束
+    func stop()
+    {
+        activityIndicator.stopAnimating()
+        self.view.isUserInteractionEnabled = true;
+    }
+    
 }

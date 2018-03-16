@@ -257,8 +257,6 @@ class CommonFunc {
         }
         
         switch identifier {
-        case "iPhone3,1", "iPhone3,2", "iPhone3,3":     return "iPhone4"
-        case "iPhone4,1":                               return "iPhone4s"
         case "iPhone5,1", "iPhone5,2":                  return "iPhone5"
         case "iPhone5,3", "iPhone5,4":                  return "iPhone5c"
         case "iPhone6,1", "iPhone6,2":                  return "iPhone5s"
@@ -266,11 +264,11 @@ class CommonFunc {
         case "iPhone7,1":                               return "iPhone6"
         case "iPhone8,1":                               return "iPhone6s"
         case "iPhone8,2":                               return "iPhone6s"
-        case "iPhone8,4":                               return "iPhoneSE"
+        case "iPhone8,4":                               return "iPhone6s"
         case "iPhone9,1", "iPhone9,2", "iPhone9,3", "iPhone9,4":  return "iPhone7"
         case "iPhone10,1","iPhone10,4", "iPhone10,2","iPhone10,5":   return "iPhone8"
         case "iPhone10,3","iPhone10,6":   return "iPhoneX"
-        default:                                        return identifier
+        default:                                        return "iPhone5"
         }
     }
     

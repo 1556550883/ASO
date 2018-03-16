@@ -4,6 +4,7 @@ import Alamofire
 class LoginView: UIViewController {
     @IBOutlet weak var username: UITextField!
     @IBOutlet weak var password: UITextField!
+    @IBOutlet var btn_verifycode: UIButton!
     @IBOutlet weak var appid: UIButton!
     @IBOutlet weak var btn_login: UIButton!
     var result:AnyObject!
@@ -22,7 +23,6 @@ class LoginView: UIViewController {
         
         let url = Constants.m_baseUrl + "app/duijie/getSystemParameter"
         Alamofire.request(url).responseJSON {response in
-            
             NetCtr.parseResponse(view: self, response: response, successHandler:{
                 result,obj,msg in
                 let appleIdCheck = obj["appleIdCheck"]?.int32Value;
@@ -91,8 +91,23 @@ class LoginView: UIViewController {
         }
     }
     
-    @IBAction func login(_ sender: Any) {
+    @IBAction func verifyCodeClick(_ sender: Any) {
+        let userName = self.username.text
+        let url = Constants.m_baseUrl + "app/user/send_msg?loginName=" + userName!
         
+        Alamofire.request(url).responseJSON {response in
+            
+            NetCtr.parseResponse(view: self, response: response, successHandler:{
+                result,obj,msg in
+                if(result == 1){
+                    self.btn_verifycode.alpha = 0.4
+                    self.btn_verifycode.isEnabled = false
+                }
+            })
+        }
+    }
+    
+    @IBAction func login(_ sender: Any) {
         let userName = self.username.text
         let passWord = self.password.text
         let strappid = UserInfo.shared.m_strAppId;
@@ -124,14 +139,18 @@ class LoginView: UIViewController {
                 let loginName = obj["loginName"] as! String;
                 let userNum = obj["userNum"] as! String;
                 let score = obj["score"]?.floatValue;
+                let scoreDay = obj["scoreDay"]?.floatValue;
+                let scoreSum = obj["scoreSum"]?.floatValue;
                 UserInfo.shared.setUserAppId(id:userAppId! )
                 UserInfo.shared.setLoginName(name:loginName)
                 UserInfo.shared.setPassWord(password:passWord)
                 UserInfo.shared.setUserNum(userNum: userNum)
                 UserInfo.shared.setScore(score: score!)
+                UserInfo.shared.setScoreDay(scoreDay: scoreDay!)
+                UserInfo.shared.setScoreSum(scoreSum: scoreSum!)
                 UserInfo.shared.setAppId(strAppId: appleid)
                 
-                DispatchQueue.main.async(execute: {self.performSegue(withIdentifier: "home", sender: self)})
+                DispatchQueue.main.async(execute: {self.performSegue(withIdentifier: "user", sender: self)})
                 
                 if(SQLiteManager.instance.creatTable()){
                     print("创建表成功!")
@@ -140,6 +159,20 @@ class LoginView: UIViewController {
                 }else{
                     print("创建表失败!")
                 }
+
+                let idfa = CommonFunc.getIDFA();
+                let retrievedString: String? = KeychainWrapper.standard.string(forKey: "idfa_aso_Key")
+                if(retrievedString == nil)
+                {
+                    KeychainWrapper.standard.set(idfa, forKey: "idfa_aso_Key")
+                    UserInfo.shared.setMidfa(idfa:idfa)
+                }else
+                {
+                    UserInfo.shared.setMidfa(idfa:retrievedString!)
+                }
+       
+                let iosversion = UIDevice.current.systemVersion
+                UserInfo.shared.setSysVersion(version: iosversion)
             })
             
             self.stop()

@@ -24,7 +24,6 @@ class AdvData{
     var m_strBundleId:String = "";
     var m_strTaskType:String = "";
     var m_timeLimit:Int = 30;
-    
     //单个app体验时间
     var m_iTimeRelease:UInt = 0;
     

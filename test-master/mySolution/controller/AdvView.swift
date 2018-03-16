@@ -25,7 +25,7 @@ class AdvView: UITableViewController {
         let channelType = Channel.ZIYOU.rawValue
         let systemType = PlateForm.IOS.rawValue
         let phoneType = CommonFunc.getDeviceEx();
-        let url = Constants.m_baseUrl + "app/channelAdverInfo/getAdverList?channelType=" + channelType + "&systemType=" + systemType + "&phoneType=" + phoneType + "&userAppId=" + UserInfo.shared.m_strUserAppId;
+        let url = Constants.m_baseUrl + "app/channelAdverInfo/getAdverList?channelType=" + channelType + "&systemType=" + systemType + "&phoneType=" + phoneType + "&userAppId=" + UserInfo.shared.m_strUserAppId + "&osversion=" + UserInfo.shared.m_sys_version;
         
         self.play();
         Alamofire.request(url).responseJSON {response in
@@ -61,17 +61,40 @@ class AdvView: UITableViewController {
             self.stop();
         }
     }
-
+    
     //领取任务
     func lingqurenwu(data:AdvData, callBack:@escaping () -> ()){
-        
         self.play();
-        
         let idfa = CommonFunc.getIDFA();
         let ip = CommonFunc.getPubIp();
         let adid = data.m_strAdId
         let adverid = data.m_strAdverId
         let userappid = UserInfo.shared.m_strUserAppId
+        let bundleid = data.m_strBundleId
+        if(idfa != UserInfo.shared.m_idfa){
+            self.stop();
+            CommonFunc.alert(view: self, title: "警告", content: "无效idfa！", okString: "了解", okHandler:{
+                action in
+            })
+            
+            return
+        }
+        //判断是否已经存在了app,先判断是否接了任务
+        let querySQL = "SELECT AdverId,start_time FROM 't_AdvDate' WHERE AdverId = \(adverid)"
+        //取出数据库中用户表所有数据
+        let result = SQLiteManager.shareInstance().queryDBData(querySQL: querySQL)
+        if(result == nil || result?.count == 0){
+            let isExisted = CommonFunc.openApp(bundleid:bundleid)
+            if(isExisted)
+            {
+                self.stop();
+                CommonFunc.alert(view: self, title: "警告", content: "此app已经存在，请先卸载！", okString: "了解", okHandler:{
+                    action in
+                })
+                
+                return
+            }
+        }
         
         let url = Constants.m_baseUrl + "app/duijie/lingQuRenWu?adid=" + adid + "&idfa=" + idfa + "&ip=" + ip + "&userAppId=" + userappid + "&adverId=" + adverid + "&appleId=" + UserInfo.shared.m_strAppId + "&userNum" + UserInfo.shared.m_strUserNum;
         
@@ -85,8 +108,7 @@ class AdvView: UITableViewController {
                     let tmp = json as! [String : AnyObject]
                     let msg = tmp["msg"] as! String;
                     
-                    if(msg != "你已成功领取任务，不需重复领取！")
-                    {
+                    if(msg != "你已成功领取任务，不需重复领取！"){
                         //领取任务的开始时间
                         let nowTime = CommonFunc.getNowTime();
                         data.setDayStart(str: nowTime);
@@ -102,7 +124,6 @@ class AdvView: UITableViewController {
                         }else{
                             print("插入领取任务时间失败")
                         }
-                        
                     }else{
                         //读取数据库
                         let querySQL = "SELECT AdverId,start_time FROM 't_AdvDate' WHERE AdverId = \(adverid)"
@@ -136,6 +157,8 @@ class AdvView: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationItem.setHidesBackButton(false, animated:false)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         self.initScroll();
         
         self.initIndicator();
@@ -186,41 +209,45 @@ class AdvView: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        CommonFunc.log("self.m_vAdvList.count",self.m_vAdvList.count)
-        if (self.m_vAdvList.count > 9)
-        {
-            print("")
-        }
         return self.m_vAdvList.count;
     }
 
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         //1创建cell
         let identifier : String = "CellViewIdentifier"
-        var cell:CellView = tableView.dequeueReusableCell(withIdentifier: identifier) as! CellView
-        if cell == nil {
-            //在swift中使用枚举类型方式 1>枚举类型.具体类型  2> .具体类型
-            cell = CellView(style: UITableViewCellStyle.value1, reuseIdentifier: identifier)
-        }
+        let cell:CellView = tableView.dequeueReusableCell(withIdentifier: identifier) as! CellView
+       
         //2设置数据
         if (indexPath.row <= self.m_vAdvList.count)
         {
             let objData = self.m_vAdvList[indexPath.row];
             let strName = objData.m_strName
             let strPrice = objData.m_strPrice
+            let type = objData.m_strTaskType
             var strRemain = objData.m_strRemainNum
             if strRemain == nil
             {
                 strRemain = "0";
             }
         
-        
-        
             cell.tf_name.text = strName;
             cell.tf_num.text = "剩" + strRemain! + "份";
-        
+            var strType = "";
+            if(type == "0")
+            {
+                strType = "快速任务";
+            }
+            else if(type == "1")
+            {
+                strType = "回调任务";
+            }
+            else
+            {
+                 strType = "自由任务";
+            }
+            
+            cell.tf_Type.text = strType
             cell.tf_money.attributedText = CommonFunc.money(money: strPrice, pluesize: 13.0, numsize: 17.0, yuansize: 13.0);
         
         
@@ -237,14 +264,6 @@ class AdvView: UITableViewController {
 //        let savePath = "imgs/" + timeStamp + "/" + objData.m_strImgUrl;
 
           let url_str = Constants.m_baseUrl + "file/adver/img/" + objData.m_strImgUrl;
-        //let url = "http://imgsrc.baidu.com/imgad/pic/item/caef76094b36acaf0accebde76d98d1001e99ce7.jpg"
-//        CommonFunc.log(url);
-//        CommonFunc.download(url: url, save: savePath, callBack: {
-//            (imagePath) in
-//            CommonFunc.log(imagePath);
-//            objData.setImgFilePath(path: imagePath);
-//            cell.img_icon.image = UIImage(named: imagePath);
-//        })
             let url = URL(string: url_str)
             cell.img_icon.kf.setImage(with: url)
             //绑定data
@@ -262,7 +281,7 @@ class AdvView: UITableViewController {
 
         m_objCurData = objData;
         
-        lingqurenwu(data:objData!, callBack: {self.performSegue(withIdentifier: "detail", sender: self)});
+        lingqurenwu(data:objData!, callBack: {self.performSegue(withIdentifier: "taskDetail", sender: self)});
         
     }
     

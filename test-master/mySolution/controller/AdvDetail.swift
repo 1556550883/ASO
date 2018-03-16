@@ -18,8 +18,11 @@ class AdvDetail: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         //禁用会退键
-        self.navigationItem.hidesBackButton = true;
-        self.navigationItem.setHidesBackButton(true, animated: false)
+//        self.navigationItem.hidesBackButton = true;
+//        self.navigationItem.setHidesBackButton(true, animated: false)   
+        self.navigationItem.setHidesBackButton(true, animated:false)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        
         btn_url.setTitle("关键字：" + m_objData.m_strName, for: .normal);
         btn_chaxun.setTitle("查询任务", for: .normal);
         btn_open.setTitle("打开软件", for: .normal);
@@ -37,6 +40,9 @@ class AdvDetail: UIViewController{
         tf_money.attributedText = CommonFunc.money(money: m_objData.m_strPrice)
         
         caculateTime();
+        
+        let item = UIBarButtonItem(title: "放弃",style: UIBarButtonItemStyle.plain, target: self, action: #selector(onGiveUpTaskClick))
+        self.navigationItem.rightBarButtonItem = item
     }
     
     func caculateTime() {
@@ -130,7 +136,7 @@ class AdvDetail: UIViewController{
         self.gotoAppStore();
     }
     
-    @IBAction func onGiveUpTaskClick(_ sender: Any) {
+    func onGiveUpTaskClick() {
         let alertController = UIAlertController(title: "放弃任务", message: "您确定要放弃任务吗？", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         let okAction = UIAlertAction(title: "放弃", style: .default, handler: {
@@ -143,7 +149,8 @@ class AdvDetail: UIViewController{
             Alamofire.request(url).responseJSON {response in
                  NetCtr.parseResponse(view: self, response: response, successHandler: {
                     result,obj,msg in
-                    CommonFunc.goto(from: self, target: "give_up_task");                 })
+                    self.navigationController?.popViewController(animated: true)
+                 })
             }
         })
         
@@ -167,7 +174,7 @@ class AdvDetail: UIViewController{
                 CommonFunc.alert(view: self, title: "任务进度", content: msg, okString: "继续做任务", okHandler: {
                     (UIAlertAction) in
                     
-                    CommonFunc.goto(from: self, target: "give_up_task");
+                     self.navigationController?.popViewController(animated: true)
                 }, exitString:"取消")
             })
         }

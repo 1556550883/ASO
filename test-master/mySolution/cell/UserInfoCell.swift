@@ -9,8 +9,8 @@
 import UIKit
 
 class UserInfoCell: UITableViewCell {
-    @IBOutlet weak var m_img: UIImageView!
 
+    @IBOutlet weak var m_img: UIImageView!
     @IBOutlet weak var m_label: UILabel!
     
     var m_data:UserBtnData!;

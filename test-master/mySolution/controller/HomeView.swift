@@ -13,7 +13,6 @@ class HomeView: UITabBarController,UITabBarControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         self.navigationController?.setNavigationBarHidden(true, animated: true)
 //        let leftBarBtn = UIBarButtonItem(title: "退出登录", style: .plain, target: self, action: #selector(backToSelectLogin))
 //        self.navigationItem.leftBarButtonItem = leftBarBtn;
