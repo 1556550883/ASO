@@ -103,10 +103,10 @@ class AdvDetail: UIViewController{
             
             let url = Constants.m_baseUrl + "app/duijie/openApp?idfa=" + idfa + "&adverId=" + adverid + "&taskType=" + tasktype;
             
-            
             Alamofire.request(url).responseJSON {response in
                 NetCtr.parseResponse(view: self, response: response, successHandler: {
                     result,obj,msg in
+                    BackGroundTimer.shared.setExpTime(time: self.m_objData.m_iTimeRelease);
                     BackGroundTimer.shared.startBackTick(sec: self.m_objData.m_iTimeRelease, bundleid:self.m_objData.m_strBundleId);
                 })
             }

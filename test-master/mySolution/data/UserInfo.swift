@@ -26,6 +26,21 @@ class UserInfo {
     var m_bCheckAppId:Bool = false;
     var m_idfa:String = "";
     var m_sys_version = "";
+    var m_phonenum = ""
+    var m_weChat = ""
+    var m_weChatHeadImg = ""
+    
+    func setWechatHeadImg(wechatHeadImg:String){
+        m_weChatHeadImg = wechatHeadImg
+    }
+    
+    func setPhonenum(phoneNum:String){
+        m_phonenum = phoneNum
+    }
+    
+    func setWeChat(weChat:String){
+        m_weChat = weChat
+    }
     
     func setCheckAppId(b:Bool) -> Void {
         m_bCheckAppId = b;

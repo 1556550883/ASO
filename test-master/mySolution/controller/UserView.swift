@@ -17,7 +17,9 @@ class UserView: UIViewController,UITableViewDelegate
     @IBOutlet var scoreDay: UITextField!
     @IBOutlet var score: UITextField!
     @IBOutlet var scoreSum: UITextField!
-        @IBOutlet weak var inviteClick: UIButton!
+    @IBOutlet weak var inviteClick: UIButton!
+    @IBOutlet weak var headImg: UIImageView!
+    
     
     //菊花
     let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: UIActivityIndicatorViewStyle.gray)
@@ -41,14 +43,79 @@ class UserView: UIViewController,UITableViewDelegate
         self.navigationItem.setHidesBackButton(true, animated:false)
         self.navigationController?.setNavigationBarHidden(true, animated: false)
         
-        self.tf_userid.text = UserInfo.shared.m_strLoginName
+        if(UserInfo.shared.m_weChat != ""){
+            self.tf_userid.text = UserInfo.shared.m_weChat;
+        }else{
+             self.tf_userid.text = UserInfo.shared.m_strLoginName
+        }
         self.tf_userid.isUserInteractionEnabled = false
         self.requestInfo();
+        
+        if(UserInfo.shared.m_weChatHeadImg != ""){
+            let url = URL(string: UserInfo.shared.m_weChatHeadImg)
+            self.headImg.kf.setImage(with: url)
+        }
     }
     
     @IBAction func inviteClick(_ sender: Any) {
-     self.performSegue(withIdentifier: "ToInvite", sender: self)
+        //self.performSegue(withIdentifier: "ToInvite", sender: self)
+        self.sendWXContentFriend()
+        //sendWXContentUser()
+//        let req = SendMessageToWXReq()
+//        req.text = "happy赚"
+//        req.bText=true
+//        req.scene=1
+//        WXApi.send(req)
+        
+//        let myWebsite = NSURL(string:"http://www.google.com/")
+//        let img: UIImage =  UIImage(named:"Icon")!
+//
+//        guard let url = myWebsite else {
+//            print("nothing found")
+//            return
+//        }
+//
+//        let shareItems:Array = [img,url]
+//        let activityViewController:UIActivityViewController = UIActivityViewController(activityItems: shareItems, applicationActivities: nil)
+//        activityViewController.excludedActivityTypes = [UIActivityType.print, UIActivityType.postToWeibo, UIActivityType.copyToPasteboard, UIActivityType.addToReadingList, UIActivityType.postToVimeo]
+//        self.present(activityViewController, animated: true, completion: nil)
     }
+    
+    //分享朋友圈
+    func sendWXContentFriend() {
+        var message:WXMediaMessage = WXMediaMessage()
+        message.title = "happy赚：" + ("点击下载" as! String)
+        
+        message.description="happy赚"
+        message.setThumbImage(UIImage(named: "icon.png"));
+        var ext:WXWebpageObject = WXWebpageObject();
+        ext.webpageUrl = "https://www.pgyer.com/I49y";
+        message.mediaObject = ext
+        message.mediaTagName = "happy赚"
+        var req = SendMessageToWXReq()
+        req.scene = 1
+        req.text = "happy赚：" + ("点击下载" as! String)
+        req.bText = false
+        req.message = message
+        WXApi.send(req);
+    }
+    
+    func sendWXContentUser() {//分享给朋友！！
+        var message:WXMediaMessage = WXMediaMessage()
+        message.title = "happy赚：" + ("点击下载" as! String)
+        message.description="happy赚"
+        //这两步是把图片缩小的
+        //var nowUIImage:UIImage = self.getNowUIImage();
+        //var endUIImage:UIImage = viewClass.OriginImage(nowUIImage, ewidth: 100, eheight: 100)
+        //message.setThumbImage(endUIImage);
+        var ext:WXWebpageObject = WXWebpageObject();
+        ext.webpageUrl = "https://www.pgyer.com/I49y";
+        message.mediaObject = ext
+        var resp = GetMessageFromWXResp()
+        resp.message = message
+        WXApi.send(resp);
+    }
+    
     @IBAction func playTaskClick(_ sender: Any){
         self.performSegue(withIdentifier: "task", sender: self)
     }
@@ -117,7 +184,23 @@ class UserView: UIViewController,UITableViewDelegate
     
     @IBAction func onTiXianClick(_ sender: Any)
     {
-        CommonFunc.alert(view: self, title: "提示", content: "请先绑定您的微信！", okString: "知道了")
+        
+         self.performSegue(withIdentifier: "Tixian", sender: self)
+//        if(UserInfo.shared.m_phonenum != "" && UserInfo.shared.m_weChat != ""){
+//            if(UserInfo.shared.m_strScore <= 20){
+//                CommonFunc.alert(view: self, title: "提示", content: "余额必须高于20元才可提现！", okString: "知道了")
+//            }else{
+//                let url =  Constants.m_baseUrl + "app/user/tixianRequest?userNum=" + UserInfo.shared.m_strUserNum
+//                Alamofire.request(url).responseJSON {response in
+//                    NetCtr.parseResponse(view: self, response: response, successHandler:{
+//                        result,obj,msg in
+//                        CommonFunc.alert(view: self, title: "提示", content: "提现申请成功，请等待管理员审核！", okString: "OK")
+//                    })
+//                }
+//            }
+//        }else{
+//            CommonFunc.alert(view: self, title: "提示", content: "请先绑定您的微信和手机号码！", okString: "知道了")
+//        }
     }
     
     

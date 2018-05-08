@@ -31,6 +31,7 @@ class AdvView: UITableViewController {
         Alamofire.request(url).responseJSON {response in
             NetCtr.parseResponse(view: self, response: response, successHandler:{
                 result,obj,msg in
+
                 let array = obj["result"] as! Array<AnyObject>
                 
                 self.m_vAdvList = [];
@@ -52,6 +53,7 @@ class AdvView: UITableViewController {
                     data.setBundleId(bundleid: item["bundleId"] as! String);
                     data.setTaskType(tasktype: item["taskType"] as! String);
                     data.setTimeLimit(timeLimit: (item["timeLimit"] as! AnyObject).stringValue);
+                    data.setExpTime(time: (item["openTime"] as AnyObject).uintValue)
                     self.m_vAdvList.append(data);
                 }
             })

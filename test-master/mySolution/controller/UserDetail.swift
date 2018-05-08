@@ -15,7 +15,8 @@ class UserDetail: UIViewController,UITableViewDataSource,UITableViewDelegate{
     @IBOutlet weak var tixian: UIButton!
     @IBOutlet weak var loginName: UITextField!
     @IBOutlet weak var first_tableView: UITableView!
-        @IBOutlet weak var tixianClick: UIButton!
+    @IBOutlet weak var weHeadImg: UIImageView!
+    @IBOutlet weak var tixianClick: UIButton!
     var m_vBtns:[UserBtnData] = [
         UserBtnData(icon:"detail_100", name:"收入明细", target:"ToScoreDetail"),
         UserBtnData(icon:"withdraw_100", name:"提现记录", target:"ToWithdraw"),
@@ -36,10 +37,29 @@ class UserDetail: UIViewController,UITableViewDataSource,UITableViewDelegate{
         
         first_tableView.dataSource = self;
         first_tableView.delegate = self;
+        
+        if(UserInfo.shared.m_weChatHeadImg != ""){
+            let url = URL(string: UserInfo.shared.m_weChatHeadImg)
+            self.weHeadImg.kf.setImage(with: url)
+        }
     }
     
     @IBAction func onTiXianClick(_ sender: Any) {
-        CommonFunc.alert(view: self, title: "提示", content: "请先绑定您的微信！", okString: "知道了")
+        if(UserInfo.shared.m_phonenum != "" && UserInfo.shared.m_weChat != ""){
+            if(UserInfo.shared.m_strScore <= 20){
+                CommonFunc.alert(view: self, title: "提示", content: "余额必须高于20元才可提现！", okString: "知道了")
+            }else{
+                let url =  Constants.m_baseUrl + "app/user/tixianRequest?userNum=" + UserInfo.shared.m_strUserNum
+                Alamofire.request(url).responseJSON {response in
+                    NetCtr.parseResponse(view: self, response: response, successHandler:{
+                        result,obj,msg in
+                            CommonFunc.alert(view: self, title: "提示", content: "提现申请成功，请等待管理员审核！", okString: "OK")
+                    })
+                }
+            }
+        }else{
+            CommonFunc.alert(view: self, title: "提示", content: "请先绑定您的微信和手机号码！", okString: "知道了")
+        }
     }
     
     override func viewDidAppear(_ animated: Bool)
@@ -47,11 +67,19 @@ class UserDetail: UIViewController,UITableViewDataSource,UITableViewDelegate{
         scoreDay.text = String(format: "%.1f", UserInfo.shared.m_strScoreDay);
         score.text = String(format: "%.1f", UserInfo.shared.m_strScore) ;
         scoreSum.text = String(format: "%.1f", UserInfo.shared.m_strScoreSum);
-        loginName.text = UserInfo.shared.m_strLoginName
+        if(UserInfo.shared.m_weChat != ""){
+            self.loginName.text = UserInfo.shared.m_weChat;
+        }else{
+            self.loginName.text = UserInfo.shared.m_strLoginName
+        }
         self.scoreDay.isUserInteractionEnabled = false
         self.score.isUserInteractionEnabled = false
         self.scoreSum.isUserInteractionEnabled = false
         self.loginName.isUserInteractionEnabled = false
+        if(UserInfo.shared.m_weChatHeadImg != ""){
+            let url = URL(string: UserInfo.shared.m_weChatHeadImg)
+            self.weHeadImg.kf.setImage(with: url)
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int

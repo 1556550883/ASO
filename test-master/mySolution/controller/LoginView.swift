@@ -13,7 +13,21 @@ class LoginView: UIViewController {
         super.viewDidLoad()
         
         self.initIndicator();
-        self.checkAppIdToggle();
+        
+        self.appid.isHidden = true;
+        self.isLogin();
+    }
+    
+    //判断是否需要登录
+    func isLogin() -> Void {
+        let userInfos = UserInfo.allUserFromDB();
+        
+        //判断是否需要登录
+        if(userInfos != nil && userInfos?.count != 0){
+            let s = userInfos?.first
+            
+            self.checkLoginStatus(userName: (s!["username"] as! String ), passWord: (s!["password"] as! String), appleid: (s!["appleid"] as! String));
+        }
     }
     
     //检查appid开关
@@ -31,24 +45,10 @@ class LoginView: UIViewController {
                 self.appid.isHidden = appleIdCheck! <= 0;
                 UserInfo.shared.setCheckAppId(b: appleIdCheck! > 0);
                 BackGroundTimer.shared.setExpTime(time: leastTaskTime);
-                
-                let userInfos = UserInfo.allUserFromDB();
-                
-                //判断是否需要登录
-                if(userInfos != nil && userInfos?.count != 0){
-                    let s = userInfos?.first
-                    
-                    if(UserInfo.shared.isCheckAppId()){
-                        if(s!["appleid"] as! String != ""){
-                            self.checkLoginStatus(userName: (s!["username"] as! String ), passWord: (s!["password"] as! String), appleid: (s!["appleid"] as! String));
-                        }
-                    }else{
-                         self.checkLoginStatus(userName: (s!["username"] as! String ), passWord: (s!["password"] as! String), appleid: (s!["appleid"] as! String));
-                    }
+                if(appleIdCheck! <= 0 || UserInfo.shared.m_strAppId != ""){
+                     DispatchQueue.main.async(execute: {self.performSegue(withIdentifier: "user", sender: self)})
                 }
-
-                //login按钮显示
-                self.btn_login.isHidden = false;
+                
             })
             
         }
@@ -87,6 +87,7 @@ class LoginView: UIViewController {
             if (UserInfo.shared.isCheckAppId())
             {
                 UserInfo.shared.setAppId(strAppId: strappid!);
+                DispatchQueue.main.async(execute: {self.performSegue(withIdentifier: "user", sender: self)})
             }
         }
     }
@@ -141,6 +142,10 @@ class LoginView: UIViewController {
                 let score = obj["score"]?.floatValue;
                 let scoreDay = obj["scoreDay"]?.floatValue;
                 let scoreSum = obj["scoreSum"]?.floatValue;
+                let userAppType = obj["userApppType"]?.floatValue;
+                let phoneNum = obj["phoneNum"] as! String;
+                let wechat = obj["weixin"] as! String;
+                let weChatHeadImg = obj["weChatHeadUrl"] as! String;
                 UserInfo.shared.setUserAppId(id:userAppId! )
                 UserInfo.shared.setLoginName(name:loginName)
                 UserInfo.shared.setPassWord(password:passWord)
@@ -149,8 +154,16 @@ class LoginView: UIViewController {
                 UserInfo.shared.setScoreDay(scoreDay: scoreDay!)
                 UserInfo.shared.setScoreSum(scoreSum: scoreSum!)
                 UserInfo.shared.setAppId(strAppId: appleid)
+                UserInfo.shared.setWeChat(weChat: wechat)
+                UserInfo.shared.setPhonenum(phoneNum: phoneNum)
+                UserInfo.shared.setWechatHeadImg(wechatHeadImg: weChatHeadImg)
                 
-                DispatchQueue.main.async(execute: {self.performSegue(withIdentifier: "user", sender: self)})
+                if(userAppType == 2)
+                {
+                     DispatchQueue.main.async(execute: {self.performSegue(withIdentifier: "user", sender: self)})
+                }else{
+                     self.checkAppIdToggle();
+                }
                 
                 if(SQLiteManager.instance.creatTable()){
                     print("创建表成功!")
