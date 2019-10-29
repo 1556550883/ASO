@@ -133,7 +133,7 @@ class CommonFunc {
     //传入字符串、字体      返回NSMutableAttributedString
     public static func appendStrWithString(str:String,font:CGFloat) -> NSMutableAttributedString {
         var attributedString : NSMutableAttributedString
-        let attStr = NSMutableAttributedString.init(string: str, attributes: [NSFontAttributeName : UIFont.systemFont(ofSize: font)])
+        let attStr = NSMutableAttributedString.init(string: str, attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: font)])
         attributedString = NSMutableAttributedString.init(attributedString: attStr)
         return attributedString
     }
@@ -141,7 +141,7 @@ class CommonFunc {
     //传入字符串、字体、颜色      返回NSMutableAttributedString
     public static func appendColorStrWithString(str:String,font:CGFloat,color:UIColor) -> NSMutableAttributedString {
         var attributedString : NSMutableAttributedString
-        let attStr = NSMutableAttributedString.init(string: str, attributes: [NSFontAttributeName : UIFont.systemFont(ofSize: font),NSForegroundColorAttributeName:color])
+        let attStr = NSMutableAttributedString.init(string: str, attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: font),NSAttributedStringKey.foregroundColor:color])
         attributedString = NSMutableAttributedString.init(attributedString: attStr)
         return attributedString
     }
@@ -188,11 +188,11 @@ class CommonFunc {
         let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
         
         
-        let strPlus : NSAttributedString = NSAttributedString(string: "+", attributes: [ NSFontAttributeName : UIFont.boldSystemFont(ofSize: pluesize)])
+        let strPlus : NSAttributedString = NSAttributedString(string: "+", attributes: [ NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: pluesize)])
         
-        let strMoney : NSAttributedString = NSAttributedString(string: money, attributes: [NSForegroundColorAttributeName : UIColor.red, NSFontAttributeName : UIFont.systemFont(ofSize: 42.0)])
+        let strMoney : NSAttributedString = NSAttributedString(string: money, attributes: [NSAttributedStringKey.foregroundColor : UIColor.red, NSAttributedStringKey.font : UIFont.systemFont(ofSize: 42.0)])
         
-        let strYuan : NSAttributedString = NSAttributedString(string: "元", attributes: [NSFontAttributeName : UIFont.systemFont(ofSize: yuansize)])
+        let strYuan : NSAttributedString = NSAttributedString(string: "元", attributes: [NSAttributedStringKey.font : UIFont.systemFont(ofSize: yuansize)])
         
         attributedStrM.append(strPlus)
         attributedStrM.append(strMoney)
@@ -200,18 +200,6 @@ class CommonFunc {
         
         return attributedStrM
 
-    }
-    
-    //html文本
-    public static func convertHtml2String(label:UILabel, htmlText:String) {
-        do {
-            let attrStr = try NSAttributedString(data: htmlText.data(using: String.Encoding.unicode, allowLossyConversion: true)!, options: [NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType], documentAttributes: nil)
-            
-            label.attributedText = attrStr;
-        }catch let error as NSError
-        {
-            print(error.localizedDescription)
-        }
     }
     
     //打印

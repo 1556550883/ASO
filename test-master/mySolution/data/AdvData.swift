@@ -15,6 +15,8 @@ class AdvData{
     var m_strAdverId:String = "";
     var m_strAdvDes:String = "";
     var m_strPrice:String = "";
+    var m_AdverDaystart:String = "";
+    var m_remark:String = "";
     //任务开始时间
     var m_dateAdverDayEnd:Date? = nil;
     //任务结束时间
@@ -37,6 +39,12 @@ class AdvData{
     {
         m_strTaskType = tasktype;
     }
+    
+    public func setRemark(remark:String)
+    {
+        m_remark = remark;
+    }
+    
     
     public func setBundleId(bundleid:String)
     {
@@ -61,6 +69,10 @@ class AdvData{
     public func setDayStart(str:Date)
     {
         m_dateAdverDayStart = str
+    }
+    public func setDayStartTime(str:String)
+    {
+        m_AdverDaystart = str
     }
     
     public func setPrice(price:String)
@@ -97,6 +109,7 @@ class AdvData{
     {
         let whitespace = NSCharacterSet.whitespacesAndNewlines
         let urlString = url.trimmingCharacters(in: whitespace)
-        m_strUrl = urlString.replacingOccurrences(of: "https:", with: "itms-apps:")   ;
+        m_strUrl = urlString;
+        //m_strUrl = urlString.replacingOccurrences(of: "https:", with: "itms-apps:")   ;
     }
 }

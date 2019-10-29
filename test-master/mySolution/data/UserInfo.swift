@@ -17,10 +17,28 @@ class UserInfo {
     var m_strLoginName:String = "";
     var m_strPassWord:String = "";
     var m_strUserNum:String = "";
+    var m_struserNick:String = "";
+    
+    var m_tongzhi:String = "";
+    var m_shareUrl:String = "";
+     var m_idfaCheck:String = "";
+    
+    var m_currentTime:Date = Date();
+    
+    
+    var m_isTixianL:Float = 0.0;
+    
+    
     var m_strScore:Float = 0.0;
+    var m_strLeastMoney:Float = 0.0;
+    
+    var m_NumType:Float = 0.0;
+    
+    
     var m_strScoreDay:Float = 0.0;
     var m_strScoreSum:Float = 0.0;
     var m_vAdverInfo:[AnyObject]! = [];
+    var m_RecordInfo:[AnyObject]! = [];
     //user apple id
     var m_strAppId:String = "";
     var m_bCheckAppId:Bool = false;
@@ -29,6 +47,28 @@ class UserInfo {
     var m_phonenum = ""
     var m_weChat = ""
     var m_weChatHeadImg = ""
+    var m_zhifubao = ""
+    
+    func setuserNick(userNick:String){
+        m_struserNick = userNick
+    }
+    func setcurrentTime(currentTime:Date){
+        m_currentTime = currentTime
+    }
+    func setShareUrl(ShareUrl:String){
+        m_shareUrl = ShareUrl
+    }
+    func setTongzhi(tongzhi:String){
+        m_tongzhi = tongzhi
+    }
+    
+    func setIdfaCheck(idfaCheck:String){
+        m_idfaCheck = idfaCheck
+    }
+    
+    func setZhifubao(zhifubao:String){
+        m_zhifubao = zhifubao
+    }
     
     func setWechatHeadImg(wechatHeadImg:String){
         m_weChatHeadImg = wechatHeadImg
@@ -56,11 +96,21 @@ class UserInfo {
     func setAdverInfo(vAdverInfo:[AnyObject]) {
         m_vAdverInfo = vAdverInfo;
     }
-    
+    func setRecordInfo(vRecordInfo:[AnyObject]) {
+        m_RecordInfo = vRecordInfo;
+    }
     func setScore(score:Float) {
         m_strScore = score;
     }
-    
+    func setType(type:Float) {
+        m_NumType = type;
+    }
+    func setLeastMoney(LeastMoney:Float) {
+        m_strLeastMoney = LeastMoney;
+    }
+    func setisTixian(isTixian:Float) {
+        m_isTixianL = isTixian;
+    }
     func setScoreDay(scoreDay:Float) {
         m_strScoreDay = scoreDay;
     }

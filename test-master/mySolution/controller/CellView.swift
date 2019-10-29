@@ -14,8 +14,10 @@ class CellView: UITableViewCell {
     @IBOutlet weak var img_icon: UIImageView!
     @IBOutlet weak var tf_num: UILabel!
     @IBOutlet var tf_Type: UILabel!
+    @IBOutlet var remark: UILabel!
     var m_objData:AdvData? = nil;
     
+    @IBOutlet weak var tf_nameLast: UITextField!
     override func awakeFromNib() {
         
         super.awakeFromNib()

@@ -45,7 +45,7 @@ class SQLiteManager: NSObject {
     func creatTable() -> Bool {
         //建表的SQL语句
         let creatUserTable = "CREATE TABLE IF NOT EXISTS 't_User' ( 'ID' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,'username' TEXT,'password' TEXT,'appleid' TEXT);"
-        let creatAdvDateTable = "CREATE TABLE IF NOT EXISTS 't_AdvDate' ( 'ID' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,'AdverId' TEXT,'start_time' TEXT);"
+        let creatAdvDateTable = "CREATE TABLE IF NOT EXISTS 't_AdvDate' ( 'ID' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,'AdverId' TEXT,'idfa' TEXT,'start_time' TEXT, 'complete_time' TEXT);"
 
         //let creatCarTable = "CREATE TABLE IF NOT EXISTS 't_Car' ('ID' INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,'type' TEXT,'output' REAL,'master' TEXT);"
         //执行SQL语句-创建表 依然,项目中一般不会只有一个表

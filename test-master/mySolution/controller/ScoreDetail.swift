@@ -17,9 +17,20 @@ class ScoreDetail: UITableViewController {
         super.viewDidLoad()
         self.navigationItem.setHidesBackButton(false, animated:false)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        let button = UIButton(frame: CGRect(x:0,y:0,width:15,height:20))
+        button.setBackgroundImage(UIImage(named:"push"), for: UIControlState.normal)
+        button.addTarget(self, action: #selector(pushback), for: UIControlEvents.touchUpInside)
+        let item = UIBarButtonItem(customView:button)
+        
+        self.navigationItem.leftBarButtonItem = item
+        
+        self.tableView.separatorColor = UIColor.clear
+        self.navigationItem.title = "收入明细"
         queryTaskSum()
     }
-    
+    @objc func pushback() {
+        self.navigationController?.popViewController(animated: true)
+    }
     func queryTaskSum(){
         self.play()
         let url = Constants.m_baseUrl + "app/duijie/queryTaskSum?idfa=" + CommonFunc.getIDFA();
@@ -27,6 +38,12 @@ class ScoreDetail: UITableViewController {
             NetCtr.parseResponse(view: self, response: response, successHandler:{
                 result, obj, msg in
                 let array = obj["result"] as! Array<AnyObject>
+                print(array)
+                if(array.count == 0){
+                    CommonFunc.alert(view: self, title: "还没有收入！！", content: "去赚钱！！！", okString: "去赚钱");
+                }
+
+                
                 UserInfo.shared.setAdverInfo(vAdverInfo: array)
                 self.tableView.reloadData();
                 self.stop()
@@ -48,7 +65,7 @@ class ScoreDetail: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
+//        return 9
         return UserInfo.shared.m_vAdverInfo.count
     }
 
@@ -57,13 +74,17 @@ class ScoreDetail: UITableViewController {
         //1创建cell
         let identifier : String = "scoredetailcell"
         let cell:ScoreCell = tableView.dequeueReusableCell(withIdentifier: identifier) as! ScoreCell
-        
+        cell.selectionStyle = UITableViewCellSelectionStyle.none
         // Configure the cell...
         let adverinfo = UserInfo.shared.m_vAdverInfo[indexPath.row];
         
-        cell.tf_title.text = adverinfo["adverName"] as! String
+//        cell.tf_title.text = adverinfo["adverName"] as! String
         let price = adverinfo["adverPrice"] as? NSNumber
-        cell.tf_price.text = price?.stringValue
+        
+        
+        
+//        cell.tf_price.text = price?.stringValue
+        cell.tf_price.text = "+" + price!.stringValue + "元"
         let status = adverinfo["status"] as! String
         var statusText = "none"
         if(status == "1")
@@ -82,7 +103,7 @@ class ScoreDetail: UITableViewController {
         cell.tf_status.text = statusText
         if(status == "2")
         {
-             cell.tf_completeTime.text = adverinfo["completeTime"] as! String
+            cell.tf_completeTime.text = adverinfo["completeTime"] as? String
         }
         
         return cell

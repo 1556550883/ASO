@@ -22,7 +22,12 @@ class AdvDetail: UIViewController{
 //        self.navigationItem.setHidesBackButton(true, animated: false)   
         self.navigationItem.setHidesBackButton(true, animated:false)
         self.navigationController?.setNavigationBarHidden(false, animated: false)
+        let button = UIButton(frame: CGRect(x:0,y:0,width:15,height:20))
+//        button.setBackgroundImage(UIImage(named:"push"), for: UIControlState.normal)
+//        button.addTarget(self, action: #selector(pushback), for: UIControlEvents.touchUpInside)
+        let item1 = UIBarButtonItem(customView:button)
         
+        self.navigationItem.leftBarButtonItem = item1
         btn_url.setTitle("关键字：" + m_objData.m_strName, for: .normal);
         btn_chaxun.setTitle("查询任务", for: .normal);
         btn_open.setTitle("打开软件", for: .normal);
@@ -44,8 +49,10 @@ class AdvDetail: UIViewController{
         let item = UIBarButtonItem(title: "放弃",style: UIBarButtonItemStyle.plain, target: self, action: #selector(onGiveUpTaskClick))
         self.navigationItem.rightBarButtonItem = item
     }
-    
-    func caculateTime() {
+    func pushback() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    @objc func caculateTime() {
         let endTime = CommonFunc.getNowTime();
         let interval = CommonFunc.getTimeInterval(create_time: m_objData.m_dateAdverDayStart!, end_time: endTime, limitTime: m_objData.m_timeLimit);
         if(interval == "0")
@@ -68,8 +75,8 @@ class AdvDetail: UIViewController{
         
         //定义富文本即有格式的字符串
         let attributedStrM : NSMutableAttributedString = NSMutableAttributedString()
-        let strShengyushijian : NSAttributedString = NSAttributedString(string: "剩余时间：", attributes: [NSForegroundColorAttributeName:UIColor.lightGray,  NSFontAttributeName : UIFont.boldSystemFont(ofSize: 13.0)])
-        let strTime : NSAttributedString = NSAttributedString(string:interval, attributes: [NSForegroundColorAttributeName : UIColor.red, NSFontAttributeName : UIFont.systemFont(ofSize: 13.0)])
+        let strShengyushijian : NSAttributedString = NSAttributedString(string: "剩余时间：", attributes: [NSAttributedStringKey.foregroundColor:UIColor.lightGray,  NSAttributedStringKey.font : UIFont.boldSystemFont(ofSize: 13.0)])
+        let strTime : NSAttributedString = NSAttributedString(string:interval, attributes: [NSAttributedStringKey.foregroundColor : UIColor.red, NSAttributedStringKey.font : UIFont.systemFont(ofSize: 13.0)])
         
         attributedStrM.append(strShengyushijian)
         attributedStrM.append(strTime)
@@ -102,12 +109,11 @@ class AdvDetail: UIViewController{
             let tasktype = m_objData.m_strTaskType
             
             let url = Constants.m_baseUrl + "app/duijie/openApp?idfa=" + idfa + "&adverId=" + adverid + "&taskType=" + tasktype;
-            
             Alamofire.request(url).responseJSON {response in
                 NetCtr.parseResponse(view: self, response: response, successHandler: {
                     result,obj,msg in
-                    BackGroundTimer.shared.setExpTime(time: self.m_objData.m_iTimeRelease);
-                    BackGroundTimer.shared.startBackTick(sec: self.m_objData.m_iTimeRelease, bundleid:self.m_objData.m_strBundleId);
+                    //BackGroundTimer.shared.setExpTime(time: self.m_objData.m_iTimeRelease);
+                    //BackGroundTimer.shared.startBackTick(sec: self.m_objData.m_iTimeRelease, bundleid:self.m_objData.m_strBundleId);
                 })
             }
         }
@@ -126,9 +132,16 @@ class AdvDetail: UIViewController{
         }
         else
         {
-            CommonFunc.gotoAppStore(urlString: "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/search");
+            
+            //let url = "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/search?term=" + m_objData.m_strName;
+            let  urlQueryAllowed = m_objData.m_strName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!
+            
+            let url = "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/search?mt=8&term=" + urlQueryAllowed;
+            
+            print(url);
+            CommonFunc.gotoAppStore(urlString: url);
         }
-        
+
         UIPasteboard.general.string = m_objData.m_strName;
     }
     
@@ -136,12 +149,13 @@ class AdvDetail: UIViewController{
         self.gotoAppStore();
     }
     
-    func onGiveUpTaskClick() {
+    @objc func onGiveUpTaskClick() {
         let alertController = UIAlertController(title: "放弃任务", message: "您确定要放弃任务吗？", preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "取消", style: .cancel, handler: nil)
         let okAction = UIAlertAction(title: "放弃", style: .default, handler: {
             action in
             print("点击了确定")
+            
             let idfa = CommonFunc.getIDFA();
             let adverid = self.m_objData.m_strAdverId
             let url = Constants.m_baseUrl + "app/duijie/setTaskTimeout?idfa=" + idfa + "&adverId=" + adverid;
@@ -161,6 +175,11 @@ class AdvDetail: UIViewController{
     
     @IBAction func onChaxuClick(_ sender: Any)
     {
+        btn_chaxun.isEnabled = false;
+        let system = ShowMessage.iphoneType();
+        let systemVersion = UIDevice.current.systemVersion
+        
+        
         let idfa = CommonFunc.getIDFA();
         let adverid = m_objData.m_strAdverId
         let adid = m_objData.m_strAdId
@@ -173,9 +192,27 @@ class AdvDetail: UIViewController{
                 result, obj, msg in
                 CommonFunc.alert(view: self, title: "任务进度", content: msg, okString: "继续做任务", okHandler: {
                     (UIAlertAction) in
-                    
+                     self.btn_chaxun.isEnabled = true;
                      self.navigationController?.popViewController(animated: true)
+                    
+                    let nowTime = CommonFunc.getNowTime();
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                    let strNowTime = formatter.string(from: nowTime);
+                    
+                    let updateSQL = "Update 't_AdvDate' set complete_time = '\(strNowTime)' WHERE AdverId = '\(adverid)'  and idfa = '\(idfa)'"
+                      print("--------------")
+                    if SQLiteManager.shareInstance().execSQL(SQL: updateSQL) {
+                      
+                        print("update success!")
+                    }else{
+                       
+                        print("upadte fail!")
+                    }
+                    
                 }, exitString:"取消")
+            },errorHandler: {
+                 self.btn_chaxun.isEnabled = true;
             })
         }
     }
